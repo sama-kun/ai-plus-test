@@ -1,7 +1,7 @@
 package dto
 
 type CreateEmployeeDTO struct {
-	Name  string `json:"name" validate:"required"`
-	Phone string `json:"phone" validate:"required"`
-	City  string `json:"city" validate:"required"`
+	Fio  string `json:"fio" validate:"required" example:"Sama Seriknur"`
+	Phone string `json:"phone" validate:"required" example:"+77071231212"`
+	City  string `json:"city" validate:"required" example:"Almaty"`
 }

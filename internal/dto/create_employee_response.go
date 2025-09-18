@@ -1,5 +1,5 @@
 package dto
 
 type CreateEmployeeResponse struct {
-	Id string `json:"id"`
+	Id int `json:"id" example:"123"`
 }

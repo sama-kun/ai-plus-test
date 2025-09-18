@@ -1,0 +1,108 @@
+basePath: /
+definitions:
+  domain.Employee:
+    properties:
+      city:
+        example: Москва
+        type: string
+      createdAt:
+        example: "2025-09-10T09:30:00Z"
+        type: string
+      deletedAt:
+        example: "null"
+        type: string
+      fio:
+        example: Иван Иванов
+        type: string
+      id:
+        example: 1
+        type: integer
+      isDeleted:
+        example: false
+        type: boolean
+      phone:
+        example: "+77071234567"
+        type: string
+      updatedAt:
+        example: "2025-09-16T12:00:00Z"
+        type: string
+    type: object
+  dto.CreateEmployeeDTO:
+    properties:
+      city:
+        example: Almaty
+        type: string
+      fio:
+        example: Sama Seriknur
+        type: string
+      phone:
+        example: "+77071231212"
+        type: string
+    required:
+    - city
+    - fio
+    - phone
+    type: object
+  dto.CreateEmployeeResponse:
+    properties:
+      id:
+        example: 123
+        type: integer
+    type: object
+  dto.ErrorResponse:
+    properties:
+      details:
+        example: name is required
+        type: string
+      error:
+        example: invalid input
+        type: string
+      statusCode:
+        example: 400
+        type: integer
+    type: object
+host: localhost:5000
+info:
+  contact: {}
+  description: This is a simple service for managing employees
+  title: Employee Service API
+  version: "1.0"
+paths:
+  /employee:
+    get:
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/domain.Employee'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: List of employee
+    post:
+      consumes:
+      - application/json
+      description: Adds a new employee
+      parameters:
+      - description: Employee info
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateEmployeeDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CreateEmployeeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create employee
+swagger: "2.0"

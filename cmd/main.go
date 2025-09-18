@@ -1,7 +1,7 @@
 // @title Employee Service API
 // @version 1.0
 // @description This is a simple service for managing employees
-// @host localhost:8080
+// @host localhost:5000
 // @BasePath /
 
 package main
@@ -18,18 +18,19 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
+	_ "github.com/sama-kun/ai-plus-test/docs"
 	"github.com/sama-kun/ai-plus-test/internal/config"
 	"github.com/sama-kun/ai-plus-test/internal/handler"
 	"github.com/sama-kun/ai-plus-test/internal/lib/logger/sl"
 	"github.com/sama-kun/ai-plus-test/internal/repository"
 	"github.com/sama-kun/ai-plus-test/internal/service"
 	"github.com/sama-kun/ai-plus-test/internal/storage"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func main() {
 	cfg := config.MustLoad()
-
-	slog.Info("Project running in: ", slog.String("ADDRESS", cfg.Address))
 
 	db, err := storage.NewPostgresDB(cfg.Database)
 	if err != nil {
@@ -44,7 +45,7 @@ func main() {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(middleware.URLFormat)
+	// r.Use(middleware.URLFormat)
 
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"*"},                     
@@ -60,7 +61,10 @@ func main() {
 	h := handler.NewEmployeeHandler(svc)
 
 	r.Post("/employee", h.CreateEmployee)
-	r.Get("/docs/*", httpSwagger.WrapHandler)
+	r.Get("/employee", h.GetEmployee)
+	r.Get("/swagger/*", httpSwagger.WrapHandler)
+
+
 
 	srv := &http.Server{
 		Addr:         cfg.HTTPServer.Address,
@@ -72,6 +76,7 @@ func main() {
 
 	go func() {
 		slog.Info("Starting server...", slog.String("address", cfg.HTTPServer.Address))
+		slog.Info("Swagger address", slog.String("address",`http://localhost:5000/swagger/index.html`))
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			slog.Error("Server failed to start", sl.Err(err))
 			os.Exit(1)

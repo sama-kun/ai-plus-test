@@ -8,14 +8,28 @@ services:
     container_name: employee_app
     depends_on:
       - postgres
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: 12345678
-      DB_NAME: employee_db
+    env_file:
+      - .env
     ports:
-      - "3000:3000"
+      - "5000:5000"
+    networks:
+      - app-network
+
+  migrate:
+    image: migrate/migrate
+    container_name: employee_migrate
+    command:
+      [
+        "-path",
+        "/migrations",
+        "-database",
+        "postgres://postgres:12345678@postgres:5432/employee_db?sslmode=disable",
+        "up",
+      ]
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      - postgres
     networks:
       - app-network
 

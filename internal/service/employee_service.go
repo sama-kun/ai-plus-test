@@ -9,15 +9,15 @@ import (
 )
 
 type EmployeeService struct {
-	repo repository.EmployeeRepository
+	repo repository.PostgresEmployeeRepoInterface
 }
 
-func NewEmployeeService(r repository.EmployeeRepository) *EmployeeService {
+func NewEmployeeService(r repository.PostgresEmployeeRepoInterface) *EmployeeService {
 	return &EmployeeService{repo: r}
 }
 
-func (s *EmployeeService) Create(ctx context.Context, name, phone, city string) (*dto.CreateEmployeeResponse, error) {
-	e, err := domain.NewEmployee(name, phone, city)
+func (s *EmployeeService) Create(ctx context.Context, fio, phone, city string) (*dto.CreateEmployeeResponse, error) {
+	e, err := domain.NewEmployee(fio, phone, city)
 	if err != nil {
 		return nil, err
 	}
@@ -30,4 +30,27 @@ func (s *EmployeeService) Create(ctx context.Context, name, phone, city string) 
 	return &dto.CreateEmployeeResponse{
 		Id: id,
 	}, nil
+}
+
+func (s *EmployeeService) FindAll(ctx context.Context) ([]*domain.Employee, error) {
+	employees, err := s.repo.FindAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*domain.Employee
+	for _, e := range employees {
+		result = append(result, &domain.Employee{
+			Id:        e.Id,
+			Fio:      e.Fio,
+			Phone:     e.Phone,
+			City:      e.City,
+			IsDeleted: e.IsDeleted,
+			DeletedAt: e.DeletedAt,
+			UpdatedAt: e.UpdatedAt,
+			CreatedAt: e.CreatedAt,
+		})
+	}
+
+	return result, nil
 }

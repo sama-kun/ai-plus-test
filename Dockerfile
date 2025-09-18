@@ -1,11 +1,11 @@
-# 1. Используем минимальный образ с Go
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
 # 2. Устанавливаем зависимости
 COPY go.mod go.sum ./
 RUN go mod download
+
 
 # 3. Копируем исходный код и компилируем бинарник
 COPY . .
@@ -19,6 +19,8 @@ WORKDIR /app
 # 5. Копируем бинарник из builder'а
 COPY --from=builder /app/main .
 COPY ./migrations ./migrations
+COPY --from=builder /app/config ./config
 
-# 7. Запуск приложения
+
+# 6. Запуск приложения
 CMD ["/app/main"]

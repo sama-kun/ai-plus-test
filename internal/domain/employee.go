@@ -9,7 +9,7 @@ import (
 
 type Employee struct {
 	Id        int        `json:"id" example:"1"`
-	Name      string     `json:"name" example:"Иван Иванов"`
+	Fio      string     `json:"fio" example:"Иван Иванов"`
 	Phone     string     `json:"phone" example:"+77071234567"`
 	City      string     `json:"city" example:"Москва"`
 	IsDeleted bool       `json:"isDeleted,omitempty" example:"false"`
@@ -19,12 +19,12 @@ type Employee struct {
 }
 
 
-func NewEmployee(name, phone, city string) (*Employee, error) {
-	name = strings.TrimSpace(name)
+func NewEmployee(fio, phone, city string) (*Employee, error) {
+	fio = strings.TrimSpace(fio)
 	phone = strings.TrimSpace(phone)
 	city = strings.TrimSpace(city)
 
-	if err := validateName(name); err != nil {
+	if err := validateName(fio); err != nil {
 		return nil, err
 	}
 	if err := validatePhone(phone); err != nil {
@@ -32,7 +32,7 @@ func NewEmployee(name, phone, city string) (*Employee, error) {
 	}
 
 	return &Employee{
-		Name:  name,
+		Fio:  fio,
 		Phone: phone,
 		City:  city,
 	}, nil

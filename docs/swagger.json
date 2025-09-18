@@ -1,0 +1,157 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simple service for managing employees",
+        "title": "Employee Service API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "paths": {
+        "/employee": {
+            "get": {
+                "summary": "List of employee",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Employee"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a new employee",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create employee",
+                "parameters": [
+                    {
+                        "description": "Employee info",
+                        "name": "employee",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateEmployeeDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateEmployeeResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Employee": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "example": "Москва"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2025-09-10T09:30:00Z"
+                },
+                "deletedAt": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "fio": {
+                    "type": "string",
+                    "example": "Иван Иванов"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "isDeleted": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+77071234567"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2025-09-16T12:00:00Z"
+                }
+            }
+        },
+        "dto.CreateEmployeeDTO": {
+            "type": "object",
+            "required": [
+                "city",
+                "fio",
+                "phone"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "example": "Almaty"
+                },
+                "fio": {
+                    "type": "string",
+                    "example": "Sama Seriknur"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+77071231212"
+                }
+            }
+        },
+        "dto.CreateEmployeeResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 123
+                }
+            }
+        },
+        "dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "string",
+                    "example": "name is required"
+                },
+                "error": {
+                    "type": "string",
+                    "example": "invalid input"
+                },
+                "statusCode": {
+                    "type": "integer",
+                    "example": 400
+                }
+            }
+        }
+    }
+}
