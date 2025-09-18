@@ -1,3 +1,9 @@
+// @title Employee Service API
+// @version 1.0
+// @description This is a simple service for managing employees
+// @host localhost:8080
+// @BasePath /
+
 package main
 
 import (
@@ -40,11 +46,21 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.URLFormat)
 
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},                     
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"}, 
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},   
+		ExposedHeaders:   []string{"Link"},                                      
+		AllowCredentials: true,                                                  
+		MaxAge:           300,
+	}))
+
 	repo := repository.NewPostgresEmployeeRepo(db)
 	svc := service.NewEmployeeService(repo)
 	h := handler.NewEmployeeHandler(svc)
 
 	r.Post("/employee", h.CreateEmployee)
+	r.Get("/docs/*", httpSwagger.WrapHandler)
 
 	srv := &http.Server{
 		Addr:         cfg.HTTPServer.Address,

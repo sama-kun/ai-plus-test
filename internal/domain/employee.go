@@ -8,15 +8,16 @@ import (
 )
 
 type Employee struct {
-	Id        int        `json:"id"`
-	Name      string     `json:"name"`
-	Phone     string     `json:"phone"`
-	City      string     `json:"city"`
-	IsDeleted bool       `json:"isDeleted,omitempty"`
-	DeletedAt *time.Time `json:"deletedAt,omitempty"`
-	UpdatedAt time.Time  `json:"updatedAt,omitempty"`
-	CreatedAt time.Time  `json:"createdAt,omitempty"`
+	Id        int        `json:"id" example:"1"`
+	Name      string     `json:"name" example:"Иван Иванов"`
+	Phone     string     `json:"phone" example:"+77071234567"`
+	City      string     `json:"city" example:"Москва"`
+	IsDeleted bool       `json:"isDeleted,omitempty" example:"false"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty" example:"null"`
+	UpdatedAt time.Time  `json:"updatedAt,omitempty" example:"2025-09-16T12:00:00Z"`
+	CreatedAt time.Time  `json:"createdAt,omitempty" example:"2025-09-10T09:30:00Z"`
 }
+
 
 func NewEmployee(name, phone, city string) (*Employee, error) {
 	name = strings.TrimSpace(name)

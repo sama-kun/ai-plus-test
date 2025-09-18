@@ -17,6 +17,14 @@ func NewEmployeeHandler(s *service.EmployeeService) *EmployeeHandler {
 	return &EmployeeHandler{svc: s}
 }
 
+// @Summary Create employee
+// @Description Adds a new employee
+// @Accept  json
+// @Produce  json
+// @Param employee body Employee true "Employee info"
+// @Success 201 {object} Employee
+// @Failure 400 {object} map[string]string
+// @Router /employee [post]
 func (h *EmployeeHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
 	var req dto.CreateEmployeeDTO
 

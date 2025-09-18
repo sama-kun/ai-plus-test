@@ -20,13 +20,5 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY ./migrations ./migrations
 
-# 6. Настраиваем переменные окружения
-# ENV POSTGRES_HOST="postgres"
-# ENV POSTGRES_PORT="5432"
-# ENV POSTGRES_USER="postgres"
-# ENV POSTGRES_PASSWORD="12345678"
-# ENV POSTGRES_DB="soft_hsm"
-# ENV REDIS_ADDR="redis:6379"
-
 # 7. Запуск приложения
 CMD ["/app/main"]
